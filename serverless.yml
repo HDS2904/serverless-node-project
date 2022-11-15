@@ -1,0 +1,68 @@
+service: aws-lambda-node
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-east-1:276810622574:table/TaskTable
+
+functions:
+  hello:
+    handler: src/handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+  createTask:
+    handler: src/controller.addTask
+    events:
+      - httpApi:
+          path: /task
+          method: post
+  showTasks:
+    handler: src/controller.getTasks
+    events:
+      - httpApi:
+          path: /task
+          method: get
+  showTask:
+    handler: src/controller.getTaskById
+    events:
+      - httpApi:
+          path: /task/{id}
+          method: get
+  editTask:
+    handler: src/controller.putTask
+    events:
+      - httpApi:
+          path: /task/{id}
+          method: put
+  delTask:
+    handler: src/controller.deleteTask
+    events:
+      - httpApi:
+          path: /task/{id}
+          method: delete
+
+resources:
+  Resources:
+    TaskTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: TaskTable
+        AttributeDefinitions:
+          - AttributeName: taskId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: taskId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
