@@ -10,8 +10,8 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource:
-        - arn:aws:dynamodb:us-east-1:276810622574:table/TaskTable
+        - S3:*
+      Resource: '*'
 
 functions:
   hello:
@@ -21,47 +21,58 @@ functions:
           path: /
           method: get
   createTask:
-    handler: src/controller.addTask
+    handler: src/controller/TaskController.addTask
     events:
       - httpApi:
           path: /task
           method: post
   showTasks:
-    handler: src/controller.getTasks
+    handler: src/controller/TaskController.getTasks
     events:
       - httpApi:
           path: /task
           method: get
   showTask:
-    handler: src/controller.getTaskById
+    handler: src/controller/TaskController.getTaskById
     events:
       - httpApi:
           path: /task/{id}
           method: get
   editTask:
-    handler: src/controller.putTask
+    handler: src/controller/TaskController.putTask
     events:
       - httpApi:
           path: /task/{id}
           method: put
   delTask:
-    handler: src/controller.deleteTask
+    handler: src/controller/TaskController.deleteTask
     events:
       - httpApi:
           path: /task/{id}
           method: delete
+  saveImage:
+    handler: src/controller/ImageController.uploadImage
+    events:
+      - httpApi:
+          path: /Image
+          method: post
 
 resources:
   Resources:
+    ImageBucketDev:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: my-image-bucket-dev-demo
+        AccessControl: PublicRead
     TaskTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: TaskTable
         AttributeDefinitions:
-          - AttributeName: taskId
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: taskId
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
