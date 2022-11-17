@@ -5,6 +5,7 @@ const S3 = require("../services/S3");
 const Responses = require("../API-Responses");
 const pm = require("parse-multipart");
 
+const bucketName = process.env.imageBucketName;
 const typesFormat = ['jpeg', 'png', 'jpg'];
 
 const uploadImage = async (event) => {
@@ -21,7 +22,7 @@ const uploadImage = async (event) => {
 				return Responses._400({ message: 'formato invalido' });
 			}
 
-			const result = await S3.write(data, fileType, imageName, 'my-image-bucket-dev-demo')
+			const result = await S3.write(data, fileType, imageName, bucketName)
 				.catch(err => {
 					console.log("error al guardar imagen: ",err);
 					return null;
@@ -31,7 +32,7 @@ const uploadImage = async (event) => {
 				return Responses._400({ message: error.message || 'failed to upload image' });
 			}
 
-			const url = `https://my-image-bucket-dev-demo.s3.amazonaws.com/${imageName}`;
+			const url = `https://${bucketName}.s3.amazonaws.com/${imageName}`;
 
 			return Responses._200({
 				imageURL: url,

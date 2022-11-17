@@ -1,10 +1,12 @@
 const Dynamo = require("../services/Dynamo");
 const Responses = require("../API-Responses");
 
+const tableName = process.env.tableName;
+
 // MOSTRAR TAREA
 const getTasks = async (event) => {
 
-	const tasks = await Dynamo.getAll('TaskTable')
+	const tasks = await Dynamo.getAll(tableName)
 		.catch( err => {
 			console.log("error al mostrar tareas: ", err);
 			return null;
@@ -26,7 +28,7 @@ const getTaskById = async (event) => {
 	}
 
 	const { id } = event.pathParameters;
-	const tasks = await Dynamo.getById(id, 'TaskTable')
+	const tasks = await Dynamo.getById(id, tableName)
 		.catch( err => {
 			console.log("error al mostrar la tarea: ", err);
 			return null;
@@ -50,7 +52,7 @@ const addTask = async (event) => {
 		description,
 		createdAt
 	}
-	const newTask = await Dynamo.write( task, 'TaskTable' )
+	const newTask = await Dynamo.write( task, tableName )
 		.catch( err => {
 			console.log("Error al crear la tarea: ", err);
 			return null;
@@ -75,7 +77,7 @@ const putTask = async (event) => {
 
 	const taskUpdate = await Dynamo.update(
 		id,
-		'TaskTable',
+		tableName,
 		UpdateExpression = 'set title = :title, description = :description',
 		ExpressionAttributeValues = {
 			':title': title,
@@ -103,7 +105,7 @@ const deleteTask = async (event) => {
 	}
 	
 	const { id } = event.pathParameters;
-	const taskDelete = await Dynamo.delete(id, 'TaskTable')
+	const taskDelete = await Dynamo.delete(id, tableName)
 		.catch( err => {
 			console.log("error al eliminar la tarea: ", err);
 			return null;
@@ -113,7 +115,7 @@ const deleteTask = async (event) => {
 		return Responses._400({ message: 'Error al eliminar.' });
 	}
 
-	return Responses._200({ taskDelete });
+	return Responses._200({ message: `La tarea ed ID: ${id} fue eliminada satisfactoriamente.` });
 }
 
 

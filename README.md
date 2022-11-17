@@ -1,92 +1,26 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
-
-# Serverless Framework Node HTTP API on AWS
-
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
-
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
-
-## Usage
-
-### Deployment
-
-```
-$ serverless deploy
-```
-
-After deploying, you should see output similar to:
-
-```bash
-Deploying aws-node-http-api-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-node-http-api-project-dev (152s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: aws-node-http-api-project-dev-hello (1.9 kB)
-```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
-
-### Invocation
-
-After successful deployment, you can call the created application via HTTP:
-
-```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
-
-Which should result in response similar to the following (removed `input` content for brevity):
-
-```json
-{
-  "message": "Go Serverless v2.0! Your function executed successfully!",
-  "input": {
-    ...
-  }
-}
-```
-
-### Local development
-
-You can invoke your function locally by using the following command:
-
-```bash
-serverless invoke local --function hello
-```
-
-Which should result in response similar to the following:
-
-```
-{
-  "statusCode": 200,
-  "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
-}
-```
 
 
-Alternatively, it is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
+# Serverless Framework Node HTTP API on AWS (DynamoDB, DynamoDB, API Gateway, Lambda, CloudFormation)
 
-```bash
-serverless plugin install -n serverless-offline
-```
+El presente proyecto aborda temas relacionados con usar servicios de AWS por medio del framework Serverless, donde se trabajo con un CRUD con dynamoDB y carga de imagenes en S3.
 
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
+UR: https://github.com/HDS2904/serverless-node-project
 
-After installation, you can start local emulation with:
+## Guía de ejecutar proyecto
 
-```
-serverless offline
-```
+1. ejecuatar el siguiente comando para instalar AWS CLI:
+  msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
 
-To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
+2. Ejecutar el comando:
+   aws configure
+  donde se debera poner el "ID de clave de acceso" y la "clave de acceso secreta" de usuario creado en AWS IAM (guia rápida de crearla: https://www.youtube.com/watch?v=mXisf92pn3g&ab_channel=CulturaDevOps)
+
+3. Ahora debera clonar el proyecto en su maquina local
+
+4. Ejecutar el comando:
+  sls deploy --verbose
+
+5. Descargar el archivo del siguiente enlace: https://drive.google.com/file/d/1VUCtGQRefrYzPJHhDDp4eIRBsD8MQRxG/view?usp=sharing , importarlo en postman para tener un folder las APIS a probar  y cambiar la variable de desarrollo "url" (en postmant) por la url principal que se genera AWS en consola despues de ejecutar el paso 4.
+
+### Nota: 
+  Recordar que los pasos 1 y 2 son escenciales para que al deployar el proyecto en SU CUENTA AWS.
